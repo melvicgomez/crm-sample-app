@@ -1,5 +1,9 @@
 @import '~antd/dist/antd.css';
 
+* {
+  font-family: 'Work Sans', sans-serif;
+}
+
 .App {
   text-align: center;
 }
@@ -37,4 +41,10 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* CUSTOM CSS */
+
+.page-highlight-icon {
+  font-size: 4em;
 }
