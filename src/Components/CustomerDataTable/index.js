@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import GetAllCustomersData from '../../Stores/CustomerReducers/GetAllCustomersData';
-
-import { Input, Table } from 'antd';
 import styled from 'styled-components';
+
+import { Button, Input, Pagination, Table } from 'antd';
+import { UsergroupAddOutlined } from '@ant-design/icons';
+
+import GetAllCustomersData from '../../Stores/CustomerReducers/GetAllCustomersData';
+import CustomerFormDrawer from '../CustomerFormDrawer';
 
 const { Search } = Input;
 
-const TableWrapper = styled.div`
-  h1 {
-    color: white;
-    font-size: 2em;
-    font-weight: bold;
-  }
-`;
+const TableWrapper = styled.div``;
 
 function index() {
   const columns = [
@@ -70,40 +67,35 @@ function index() {
   const dispatch = useDispatch();
   const customers = useSelector((state) => state.customers);
 
-  const [sortBy, setSortBy] = useState('last_name');
-  const [orderBy, setOrderBy] = useState('DESC');
+  const [orderBy, setOrderBy] = useState('last_name');
+  const [orderByDirection, setOrderByDirection] = useState('DESC');
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     dispatch(GetAllCustomersData.action({ page: 1 }));
   }, []);
 
-  const onChange = (pagination, filters, sorter, extra) => {
-    console.log('pagination', pagination);
-    console.log('sorter', sorter);
-    console.log('extra', extra);
+  const [customerFormDrawerVisibility, setCustomerFormDrawerVisibility] =
+    useState(false);
 
-    switch (extra.action) {
-      case 'paginate':
-        break;
-      case 'sort':
-        setSortBy(sorter.field);
-        setOrderBy(sorter.order === 'ascend' ? 'ASC' : 'DESC');
-        dispatch(
-          GetAllCustomersData.action({
-            page: 1,
-            search: searchKeyword,
-            orderBy: sorter.field,
-            orderByDirection: sorter.order === 'ascend' ? 'asc' : 'desc',
-          })
-        );
-        break;
-      default:
-        break;
+  const onTableChange = (pagination, filters, sorter, extra) => {
+    if (extra.action === 'sort') {
+      setOrderBy(sorter.field);
+      setOrderByDirection(sorter.order === 'ascend' ? 'ASC' : 'DESC');
+      dispatch(
+        GetAllCustomersData.action({
+          page: 1,
+          search: searchKeyword,
+          orderBy: sorter.field,
+          orderByDirection: sorter.order === 'ascend' ? 'asc' : 'desc',
+        })
+      );
     }
   };
 
-  const onSearch = (value) => {
+  const onCustomerSearch = (value) => {
+    setCurrentPage(1);
     setSearchKeyword(value);
     dispatch(GetAllCustomersData.action({ page: 1, search: value }));
   };
@@ -111,29 +103,42 @@ function index() {
   return (
     <TableWrapper>
       <div style={{ paddingBottom: 6 }}>
-        <h1>CRM APP 1.0.0</h1>
         <Search
           size="large"
           placeholder="Search"
-          onSearch={onSearch}
-          enterButton="Search"
+          onSearch={onCustomerSearch}
+          enterButton="SEARCH"
           allowClear
           style={{ paddingBottom: 20 }}
         />
 
         <div className="table-results-info">
           <div>
-            Total Records Found: <b>{customers.item?.total}</b>
+            <span>
+              Total Records: <b>{customers.item?.total}</b>
+            </span>
+            <span style={{ marginLeft: 16 }}>
+              Sorted By:{' '}
+              <b>
+                {columns.filter((column) => column.key === orderBy)[0].title},{' '}
+                {orderByDirection}
+              </b>
+            </span>
           </div>
+
           <div>
-            Sorted By:{' '}
-            <b>
-              {columns.filter((column) => column.key === sortBy)[0].title},{' '}
-              {orderBy}
-            </b>
+            <Button
+              type="primary"
+              shape="round"
+              icon={<UsergroupAddOutlined />}
+              onClick={() => setCustomerFormDrawerVisibility(true)}
+            >
+              ADD NEW CUSTOMER
+            </Button>
           </div>
         </div>
       </div>
+
       <Table
         scroll={{ x: 600 }}
         rowKey={(rec) => rec.cust_code}
@@ -141,8 +146,33 @@ function index() {
         dataSource={customers.item?.data || []}
         bordered={true}
         loading={customers.loading}
-        onChange={onChange}
-        pagination={{ position: ['bottomCenter'] }}
+        onChange={onTableChange}
+        pagination={false}
+      />
+
+      <Pagination
+        defaultCurrent={1}
+        current={currentPage}
+        total={customers?.item?.total || 0}
+        onChange={(page) => {
+          setCurrentPage(page);
+          dispatch(
+            GetAllCustomersData.action({
+              page,
+              search: searchKeyword,
+              orderBy: orderBy,
+              orderByDirection: orderByDirection,
+            })
+          );
+        }}
+        style={{ marginTop: 6 }}
+      />
+
+      <CustomerFormDrawer
+        visible={customerFormDrawerVisibility}
+        onClose={() => {
+          setCustomerFormDrawerVisibility(false);
+        }}
       />
     </TableWrapper>
   );

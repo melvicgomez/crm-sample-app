@@ -3,20 +3,26 @@ import styled from 'styled-components';
 
 import CustomerDataTable from '../../Components/CustomerDataTable';
 
-function index() {
-  const StyledWrapper = styled.div`
-    background-color: rgb(192, 47, 29);
-    height: 100vh;
-    padding: 20px 0px;
-    > div {
-      max-width: 1366px;
-      margin: auto;
-    }
-  `;
+const StyledWrapper = styled.div`
+  padding: 10px;
 
+  h1 {
+    color: white;
+    font-size: 2em;
+    font-weight: bold;
+  }
+  > div {
+    max-width: 1366px;
+    margin: auto;
+  }
+`;
+
+function index() {
   return (
     <StyledWrapper>
       <div>
+        <h1>CRM APP 1.0.0</h1>
+
         <CustomerDataTable />
       </div>
     </StyledWrapper>

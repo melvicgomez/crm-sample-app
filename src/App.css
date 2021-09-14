@@ -1,4 +1,7 @@
 @import '~antd/dist/antd.css';
+body {
+  background-color: rgb(192, 47, 29);
+}
 
 * {
   font-family: 'Work Sans', sans-serif;
@@ -53,8 +56,18 @@
   color: rgba(255, 255, 255, 0.8);
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
 }
 
 .table-results-info b {
   color: rgba(255, 255, 255, 1);
+}
+
+.ant-drawer-content-wrapper {
+  width: 400px !important;
+}
+
+.ant-drawer-body {
+  padding: 16px !important;
 }
