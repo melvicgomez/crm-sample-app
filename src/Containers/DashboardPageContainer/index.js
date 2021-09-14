@@ -1,20 +1,25 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import GetAllCustomersData from '../../Stores/CustomerReducers/GetAllCustomersData';
+import React from 'react';
+import styled from 'styled-components';
+
+import CustomerDataTable from '../../Components/CustomerDataTable';
 
 function index() {
-  const dispatch = useDispatch();
-  const customers = useSelector((state) => state.customers);
-
-  useEffect(() => {
-    dispatch(GetAllCustomersData.action({ page: 1 }));
-  }, []);
+  const StyledWrapper = styled.div`
+    background-color: rgb(192, 47, 29);
+    height: 100vh;
+    padding: 20px 0px;
+    > div {
+      max-width: 1366px;
+      margin: auto;
+    }
+  `;
 
   return (
-    <div>
-      <h1>Home Page</h1>
-      <p>{JSON.stringify(customers)}</p>
-    </div>
+    <StyledWrapper>
+      <div>
+        <CustomerDataTable />
+      </div>
+    </StyledWrapper>
   );
 }
 

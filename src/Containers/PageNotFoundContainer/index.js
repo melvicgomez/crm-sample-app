@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Button } from 'antd';
 import { useHistory } from 'react-router';
 
-const Wrapper = styled.section`
+const StyledWrapper = styled.section`
   background-color: #2d3436;
   height: 100vh;
   margin: 0px;
@@ -36,7 +36,7 @@ const Wrapper = styled.section`
 function index() {
   const history = useHistory();
   return (
-    <Wrapper>
+    <StyledWrapper>
       <div class="flex-wrapper">
         <div class="welcome-wrapper">
           <div className="page-highlight-icon">🚧</div>
@@ -52,7 +52,7 @@ function index() {
           </div>
         </div>
       </div>
-    </Wrapper>
+    </StyledWrapper>
   );
 }
 
