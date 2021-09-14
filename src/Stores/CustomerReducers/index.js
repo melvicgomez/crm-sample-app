@@ -1,4 +1,5 @@
 import { buildSlice } from '@thecodingmachine/redux-toolkit-wrapper';
+import UpdateCustomerData from './UpdateCustomerData';
 import GetAllCustomersData from './GetAllCustomersData';
 import PostNewCustomerData from './PostNewCustomerData';
 
@@ -13,6 +14,6 @@ const sliceInitialState = {
 
 export default buildSlice(
   'customers',
-  [GetAllCustomersData, PostNewCustomerData],
+  [GetAllCustomersData, PostNewCustomerData, UpdateCustomerData],
   sliceInitialState
 ).reducer;

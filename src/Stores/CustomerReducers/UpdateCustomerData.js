@@ -4,11 +4,11 @@ import {
   buildAsyncActions,
 } from '@thecodingmachine/redux-toolkit-wrapper';
 
-import PostNewCustomerData from '../../Services/CustomerApis/PostNewCustomerData';
+import UpdateCustomerData from '../../Services/CustomerApis/UpdateCustomerData';
 
 export default {
   initialState: buildAsyncState(),
-  action: buildAsyncActions('POST/NEW_CUSTOMER_DATA', PostNewCustomerData),
+  action: buildAsyncActions('UPDATE/CUSTOMER_DATA', UpdateCustomerData),
   reducers: {
     ...buildAsyncReducers({
       errorKey: 'error',

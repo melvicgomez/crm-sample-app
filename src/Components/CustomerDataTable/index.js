@@ -71,6 +71,7 @@ function index() {
   const [orderByDirection, setOrderByDirection] = useState('DESC');
   const [searchKeyword, setSearchKeyword] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectRecord, setSelectedRecord] = useState(null);
 
   useEffect(() => {
     dispatch(GetAllCustomersData.action({ page: 1 }));
@@ -97,7 +98,14 @@ function index() {
   const onCustomerSearch = (value) => {
     setCurrentPage(1);
     setSearchKeyword(value);
-    dispatch(GetAllCustomersData.action({ page: 1, search: value }));
+    dispatch(
+      GetAllCustomersData.action({
+        page: 1,
+        search: value,
+        orderBy: orderBy,
+        orderByDirection: orderByDirection,
+      })
+    );
   };
 
   return (
@@ -131,7 +139,10 @@ function index() {
               type="primary"
               shape="round"
               icon={<UsergroupAddOutlined />}
-              onClick={() => setCustomerFormDrawerVisibility(true)}
+              onClick={() => {
+                setSelectedRecord(null);
+                setCustomerFormDrawerVisibility(true);
+              }}
             >
               ADD NEW CUSTOMER
             </Button>
@@ -148,6 +159,12 @@ function index() {
         loading={customers.loading}
         onChange={onTableChange}
         pagination={false}
+        onRow={(record) => ({
+          onClick: () => {
+            setSelectedRecord(record);
+            setCustomerFormDrawerVisibility(true);
+          },
+        })}
       />
 
       <Pagination
@@ -172,7 +189,16 @@ function index() {
         visible={customerFormDrawerVisibility}
         onClose={() => {
           setCustomerFormDrawerVisibility(false);
+          dispatch(
+            GetAllCustomersData.action({
+              currentPage,
+              search: searchKeyword,
+              orderBy: orderBy,
+              orderByDirection: orderByDirection,
+            })
+          );
         }}
+        customerData={selectRecord}
       />
     </TableWrapper>
   );
