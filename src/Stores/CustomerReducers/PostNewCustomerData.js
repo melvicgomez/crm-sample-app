@@ -15,8 +15,5 @@ export default {
       loadingKey: 'loading',
       itemKey: 'item',
     }),
-    fulfilled: (state) => {
-      state.loading = false;
-    },
   },
 };

@@ -38,8 +38,8 @@ function index() {
 
   return (
     <StyledWrapper>
-      <div class="flex-wrapper">
-        <div class="welcome-wrapper">
+      <div className="flex-wrapper">
+        <div className="welcome-wrapper">
           <h1>Welcome to CRM APP 1.0.0</h1>
           <p>Melvic Gomez made it with ❤ just for you.</p>
           <div>

@@ -37,8 +37,8 @@ function index() {
   const history = useHistory();
   return (
     <StyledWrapper>
-      <div class="flex-wrapper">
-        <div class="welcome-wrapper">
+      <div className="flex-wrapper">
+        <div className="welcome-wrapper">
           <div className="page-highlight-icon">🚧</div>
           <h1>404 PAGE NOT FOUND</h1>
           <div>

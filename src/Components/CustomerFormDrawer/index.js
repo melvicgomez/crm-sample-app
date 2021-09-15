@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { DatePicker, Drawer } from 'antd';
 
 import { Form, Input, Button } from 'antd';
@@ -10,6 +10,8 @@ import UpdateCustomerData from '../../Stores/CustomerReducers/UpdateCustomerData
 
 function index({ visible, onClose, customerData }) {
   const dispatch = useDispatch();
+  const customers = useSelector((state) => state.customers);
+
   const [form] = Form.useForm();
 
   const onFinish = async (values) => {
@@ -21,8 +23,7 @@ function index({ visible, onClose, customerData }) {
       address: values.address,
       date_of_birth: values.date_of_birth.format('YYYY-MM-DD'),
     };
-
-    if (customerData.cust_code)
+    if (customerData?.cust_code)
       await dispatch(
         UpdateCustomerData.action({
           ...params,
@@ -30,7 +31,8 @@ function index({ visible, onClose, customerData }) {
         })
       );
     else await dispatch(PostNewCustomerData.action(params));
-    onClose();
+
+    // onClose(true);
   };
 
   useEffect(() => {
@@ -47,13 +49,23 @@ function index({ visible, onClose, customerData }) {
       });
   }, [visible]);
 
+  useEffect(() => {
+    if (!customers.loading && visible) {
+      if (!customers.error) {
+        onClose(true);
+      }
+    }
+  }, [customers.loading]);
+
   return (
     <Drawer
       forceRender
-      title="New Customer Form"
+      title={`${
+        customerData?.cust_code ? 'Update' : 'New'
+      } Customer Record Form`}
       placement="right"
       size="large"
-      onClose={onClose}
+      onClose={() => onClose(false)}
       visible={visible}
       destroyOnClose
     >

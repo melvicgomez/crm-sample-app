@@ -187,16 +187,18 @@ function index() {
 
       <CustomerFormDrawer
         visible={customerFormDrawerVisibility}
-        onClose={() => {
+        onClose={(hasAnAction) => {
           setCustomerFormDrawerVisibility(false);
-          dispatch(
-            GetAllCustomersData.action({
-              currentPage,
-              search: searchKeyword,
-              orderBy: orderBy,
-              orderByDirection: orderByDirection,
-            })
-          );
+          if (hasAnAction) {
+            dispatch(
+              GetAllCustomersData.action({
+                currentPage,
+                search: searchKeyword,
+                orderBy: orderBy,
+                orderByDirection: orderByDirection,
+              })
+            );
+          }
         }}
         customerData={selectRecord}
       />
