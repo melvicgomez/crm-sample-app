@@ -69,7 +69,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           envs: RELEASE_DIR
           script: |
-            # cd $RELEASE_DIR
-            # rm -rf public_html/$RELEASE_DIR/&
+            cd $RELEASE_DIR
+            # rm -rf public_html/&
             # tar -C public_html/$RELEASE_DIR/ -xzvf bundle.tar.gz
             # rm -rf public_html/$RELEASE_DIR/bundle.tar.gz
