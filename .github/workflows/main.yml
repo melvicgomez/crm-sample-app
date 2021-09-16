@@ -30,7 +30,7 @@ jobs:
           npm run build
 
       - name: Create zip file of public directory
-        run: tar -zcvf bundle.tar.gz -C public/ .
+        run: tar -zcvf bundle.tar.gz -C build/ .
 
       - name: Store bundle in artifact
         uses: actions/upload-artifact@v2
