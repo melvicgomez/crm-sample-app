@@ -69,7 +69,8 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           envs: RELEASE_DIR
           script: |
-            rm -rf public_html/crm-demo-web-app/* !(bundle.tar.gz)
+            shopt -s extglob
+            rm -rf public_html/crm-demo-web-app/* !("bundle.tar.gz")
             cd public_html/crm-demo-web-app
             tar -C / -xzvf bundle.tar.gz
             rm -rf bundle.tar.gz
