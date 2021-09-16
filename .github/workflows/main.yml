@@ -70,7 +70,7 @@ jobs:
           envs: RELEASE_DIR
           script: |
             whoami
-            ls
+            ls -al
             cd $RELEASE_DIR
             tar -C crm-demo-web-app/ -xzvf bundle.tar.gz
             rm -rf bundle.tar.gz
