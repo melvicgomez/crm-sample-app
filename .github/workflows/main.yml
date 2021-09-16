@@ -74,6 +74,7 @@ jobs:
             pwd
             rm -rf $RELEASE_DIR/&
             pwd
+            ls
             tar -C $RELEASE_DIR/ -xzvf bundle.tar.gz
             pwd
             rm -rf $RELEASE_DIR/bundle.tar.gz
