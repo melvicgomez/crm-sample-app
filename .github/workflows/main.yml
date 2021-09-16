@@ -72,6 +72,6 @@ jobs:
             whoami
             ls -al
             mkdir abc/def
-            cd $RELEASE_DIR
+            cd domains/melvicgomez.com/public_html
             tar -C crm-demo-web-app/ -xzvf bundle.tar.gz
             rm -rf bundle.tar.gz
