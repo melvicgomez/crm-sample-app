@@ -1,5 +1,7 @@
 # **CRM Sample App Documentation**
 
+[![CI/CD](https://github.com/melvicgomez/crm-sample-app/actions/workflows/main.yml/badge.svg)](https://github.com/melvicgomez/crm-sample-app/actions/workflows/main.yml)
+
 ### **Prerequisite**
 * npm - https://nodejs.org/en/download/
 * serve - Install serve package globally to your machine `npm install -g serve`
@@ -21,6 +23,13 @@ REACT_APP_API_URL=$DOMAIN/api
   * `npm start` - to run the app in development
   * `npm build ` - to build the app for production, you can serve/run the production build by running the command `serve -s build`
   * `npm test -- --coverage` - to run all test scripts
+
+
+### **What to expect next?**
+* **Add Products** to use the customers' data and link to products
+* **Authentication** for data security and we can identify who added the customer data
+* **Reports** for analytics of customers coming in from a period of time
+* **Google Analytics** track all the sources of traffic (demographics, country and etc)
 
 ### **Troubleshooting**
 * You can contact me thru connect@melvicgomez.com, if you need assistance on how to setup the app.
