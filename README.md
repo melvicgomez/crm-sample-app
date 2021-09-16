@@ -9,7 +9,7 @@
   * Clone via SSH - `git@github.com:melvicgomez/crm-sample-app.git`
   * Clone via HTTPS - `git clone https://github.com/melvicgomez/crm-sample-app.git`
 * Create a file `.env` in the root directory by copying the `.env.example` file
-* Change the environment variables to target your backend
+* In `.env` file, change the environment variables to target your backend
 ```
 DOMAIN=http://crm-app.melvicgomez.com
 REACT_APP_API_URL=$DOMAIN/api
