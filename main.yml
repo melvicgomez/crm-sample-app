@@ -2,77 +2,74 @@ name: CI/CD
 
 on:
   push:
-    branches: [main]
+    branches: [master]
 
+jobs:
+  build: # set depends on what you need
+    name: Build
+    runs-on: ubuntu-latest
 
-# jobs:
-#   build: # set depends on what you need
-#     name: Build
-#     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
 
-#     steps:
-#       - uses: actions/checkout@v2
-#       - uses: actions/setup-node@v1
-#         with:
-#           node-version: 12
+      - name: Create .env file
+        env:
+          DOMAIN: ${{ secrets.DOMAIN }}
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+        run: |
+          touch .env
+          echo "DOMAIN=$DOMAIN" >> .env
+          echo "REACT_APP_API_URL=$REACT_APP_API_URL" >> .env
 
-#       - name: Create .env file
-#         env:
-#           CMS_API_URL: ${{ secrets.CMS_API_URL }}
-#           CMS_IDENTIFIER: ${{ secrets.CMS_IDENTIFIER }}
-#           CMS_PASSWORD: ${{ secrets.CMS_PASSWORD }}
-#         run: |
-#           touch .env
-#           echo "CMS_API_URL=$CMS_API_URL" >> .env
-#           echo "CMS_IDENTIFIER=$CMS_IDENTIFIER" >> .env
-#           echo "CMS_PASSWORD=$CMS_PASSWORD" >> .env
+      - name: Install dependencies and build project
+        run: |
+          npm i
+          npm run build
 
-#       - name: Install dependencies and build project
-#         run: |
-#           npm i
-#           npm run build
+      - name: Create zip file of public directory
+        run: tar -zcvf bundle.tar.gz -C public/ .
 
-#       - name: Create zip file of public directory
-#         run: tar -zcvf bundle.tar.gz -C public/ .
+      - name: Store bundle in artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: bundle-tar
+          path: bundle.tar.gz
+          retention-days: 1
 
-#       - name: Store bundle in artifact
-#         uses: actions/upload-artifact@v2
-#         with:
-#           name: bundle-tar
-#           path: bundle.tar.gz
-#           retention-days: 1
+  deploy: # set depends on what you need
+    name: Deploy project
+    needs: build
+    runs-on: ubuntu-latest
 
-#   deploy: # set depends on what you need
-#     name: Deploy project
-#     needs: build
-#     runs-on: ubuntu-latest
+    steps:
+      - name: Download bundle artifact from previous job
+        uses: actions/download-artifact@v2
+        with:
+          name: bundle-tar
 
-#     steps:
-#       - name: Download bundle artifact from previous job
-#         uses: actions/download-artifact@v2
-#         with:
-#           name: bundle-tar
+      - name: Upload bundle tar file in Hostinger using FTP
+        uses: SamKirkland/FTP-Deploy-Action@4.0.0
+        with:
+          server: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          server-dir: ${{ secrets.FTP_ARCHIVE_DEST }}
 
-#       - name: Upload bundle tar file in Hostinger using FTP
-#         uses: SamKirkland/FTP-Deploy-Action@4.0.0
-#         with:
-#           server: ${{ secrets.SERVER_HOST }}
-#           username: ${{ secrets.SERVER_USERNAME }}
-#           password: ${{ secrets.SERVER_PASSWORD }}
-#           server-dir: ${{ secrets.FTP_ARCHIVE_DEST }}
-
-#       - name: Extract and copy files in public_html directory using ssh
-#         uses: appleboy/ssh-action@master
-#         env:
-#           RELEASE_DIR: ${{ secrets.RELEASE_DIR }}
-#         with:
-#           host: ${{ secrets.SERVER_HOST }}
-#           username: ${{ secrets.SERVER_USERNAME }}
-#           password: ${{ secrets.SERVER_PASSWORD }}
-#           port: ${{ secrets.SSH_PORT }}
-#           envs: RELEASE_DIR
-#           script: |
-#             cd $RELEASE_DIR
-#             rm -rf public_html/&
-#             tar -C public_html/ -xzvf bundle.tar.gz
-#             rm -rf bundle.tar.gz
+      - name: Extract and copy files in public_html directory using ssh
+        uses: appleboy/ssh-action@master
+        env:
+          RELEASE_DIR: ${{ secrets.RELEASE_DIR }}
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          envs: RELEASE_DIR
+          script: |
+            cd $RELEASE_DIR
+            rm -rf public_html/&
+            tar -C public_html/ -xzvf bundle.tar.gz
+            rm -rf bundle.tar.gz
