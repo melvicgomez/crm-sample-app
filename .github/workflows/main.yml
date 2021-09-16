@@ -69,9 +69,8 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           envs: RELEASE_DIR
           script: |
-            whoami
-            ls -al
-            cd domains/melvicgomez.com/public_html
-            mkdir abc/def
+            cd $RELEASE_DIR
+            rm -rf crm-demo-web-app/
+            mkdir crm-demo-web-app/
             tar -C crm-demo-web-app/ -xzvf bundle.tar.gz
             rm -rf bundle.tar.gz
